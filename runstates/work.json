@@ -1,0 +1,29 @@
+{
+  "id": "work",
+  "label": "Work",
+  "icon": "briefcase",
+  "description": "Documents, terminals and meetings. Balanced power, game/capture stacks down.",
+  "est_seconds": 40,
+  "userland": { "mode": "keep" },
+  "gates": [
+    { "kind": "no_pending_reboot", "policy": "warn" },
+    { "kind": "disk_free_min_gb", "value": 20, "policy": "warn" }
+  ],
+  "steps": [
+    { "id": "power", "label": "Balanced power plan", "action": "power.plan",
+      "params": { "plan": "Balanced" }, "est_s": 2 },
+    { "id": "min-cpu", "label": "Processor minimum state 20%", "action": "power.setting",
+      "params": { "subgroup": "54533251-82be-4824-96c1-47b60b740d00", "setting": "893dee8e-2bef-41e0-89c6-b55d0929964c", "ac_value": 20 },
+      "est_s": 2 },
+    { "id": "stop-obs", "label": "Stop OBS", "action": "process.stop",
+      "params": { "names": ["obs64.exe"], "grace_s": 8 }, "est_s": 6, "weight": 0.5, "critical": false },
+    { "id": "stop-games", "label": "Stop game launchers", "action": "process.stop",
+      "params": { "names": ["steam.exe", "steamwebhelper.exe", "gameoverlayui.exe"], "grace_s": 10 },
+      "est_s": 8, "weight": 0.6, "critical": false },
+    { "id": "discord", "label": "Discord available", "action": "process.start",
+      "params": { "path": "C:\\Users\\14843\\AppData\\Local\\Discord\\Update.exe", "args": ["--processStart", "Discord.exe"], "names": ["discord.exe"], "wait_s": 20 },
+      "est_s": 10, "critical": false },
+    { "id": "shell", "label": "Explorer running", "action": "process.ensure_running",
+      "params": { "names": ["explorer.exe"] }, "est_s": 1 }
+  ]
+}

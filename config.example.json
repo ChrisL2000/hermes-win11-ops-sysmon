@@ -1,0 +1,53 @@
+{
+  "_comment": "Copy to %LOCALAPPDATA%\\hermes-sysmon\\config.json and edit. Everything here is optional; missing keys fall back to sysmon/config.py DEFAULTS.",
+  "agent": {
+    "name": "hermes-win11-ops:sysmon-peeweeherman",
+    "id": "sysmon-peeweeherman",
+    "role": "worker",
+    "labels": { "site": "home", "gpu": "rtx4070ti" }
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8765,
+    "bind_extra_hosts": [],
+    "require_token_off_loopback": true
+  },
+  "sampler": { "interval_s": 1.0, "buffer": 3600, "top_processes": 12 },
+  "head": {
+    "local_dir": "%LOCALAPPDATA%/hermes-sysmon/head",
+    "share_dir": "\\\\us-hm-proxmox01\\bots\\heads",
+    "heartbeat_s": 30,
+    "supervisor_url": "",
+    "supervisor_token": ""
+  },
+  "logs": {
+    "jsonl": true,
+    "rotate_mb": 16,
+    "keep_days": 14,
+    "ship": {
+      "share_dir": "\\\\us-hm-proxmox01\\bots\\logs\\peeweeherman",
+      "http_url": "",
+      "http_index": "sysmon",
+      "batch": 200
+    }
+  },
+  "links": {
+    "grafana": "http://robertdobbs:3000",
+    "kibana": "http://robertdobbs:5601",
+    "elk_host": "robertdobbs",
+    "other_agents": []
+  },
+  "gates": {
+    "uptime_min_h": 0.0,
+    "disk_free_min_gb": 15,
+    "crash_lookback_h": 24,
+    "pending_reboot": "warn"
+  },
+  "engine": {
+    "default_step_timeout_s": 120,
+    "abort_grace_s": 5,
+    "record_history": 200,
+    "boot_runstate": "",
+    "auto_remediate": false
+  }
+}

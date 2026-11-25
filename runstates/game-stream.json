@@ -1,0 +1,37 @@
+{
+  "id": "game-stream",
+  "label": "Game + Stream",
+  "icon": "broadcast",
+  "description": "High performance plus the capture + voice stack up. OBS is expected to be configured to start streaming on launch.",
+  "est_seconds": 75,
+  "userland": { "mode": "keep", "keep": ["discord.exe", "obs64.exe"] },
+  "gates": [
+    { "kind": "no_pending_reboot", "policy": "warn" },
+    { "kind": "no_crash_events", "hours": 6, "max": 2, "policy": "warn" },
+    { "kind": "disk_free_min_gb", "value": 40, "policy": "warn" }
+  ],
+  "steps": [
+    { "id": "power", "label": "High performance power plan", "action": "power.plan",
+      "params": { "plan": "High performance" }, "est_s": 2 },
+    { "id": "min-cpu", "label": "Processor minimum state 100%", "action": "power.setting",
+      "params": { "subgroup": "54533251-82be-4824-96c1-47b60b740d00", "setting": "893dee8e-2bef-41e0-89c6-b55d0929964c", "ac_value": 100 },
+      "est_s": 2 },
+    { "id": "stop-browsers", "label": "Stop Chrome", "action": "process.stop",
+      "params": { "names": ["chrome.exe"], "grace_s": 10 }, "est_s": 8, "weight": 0.8, "critical": false },
+    { "id": "stop-music", "label": "Stop TIDAL", "action": "process.stop",
+      "params": { "names": ["tidal.exe"], "grace_s": 6 }, "est_s": 5, "weight": 0.4, "critical": false },
+    { "id": "obs", "label": "OBS running", "action": "process.start",
+      "params": { "path": "C:\\Program Files\\obs-studio\\bin\\64bit\\obs64.exe", "cwd": "C:\\Program Files\\obs-studio\\bin\\64bit", "args": ["--minimize-to-tray"], "names": ["obs64.exe"], "wait_s": 40 },
+      "est_s": 25 },
+    { "id": "discord", "label": "Discord running", "action": "process.start",
+      "params": { "path": "C:\\Users\\14843\\AppData\\Local\\Discord\\Update.exe", "args": ["--processStart", "Discord.exe"], "names": ["discord.exe"], "wait_s": 25 },
+      "est_s": 15, "critical": false },
+    { "id": "steam", "label": "Steam running", "action": "process.start",
+      "params": { "path": "C:\\Program Files (x86)\\Steam\\steam.exe", "names": ["steam.exe"], "wait_s": 25 },
+      "est_s": 10, "critical": false }
+  ],
+  "on_leave": [
+    { "id": "leave-obs", "label": "Stop OBS when leaving stream state", "action": "process.stop",
+      "params": { "names": ["obs64.exe"], "grace_s": 10 }, "est_s": 8, "critical": false }
+  ]
+}

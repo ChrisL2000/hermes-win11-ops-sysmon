@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sysmon</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="row">
+      <span id="statusdot" class="dot idle"></span>
+      <span id="agent" class="agent">sysmon</span>
+      <span class="spacer"></span>
+      <span id="uptime" class="muted">--</span>
+    </div>
+    <div class="row sub">
+      <span id="host" class="muted">--</span>
+      <span class="spacer"></span>
+      <span id="elev" class="badge">--</span>
+    </div>
+  </header>
+
+  <section class="card current">
+    <div class="cardlabel">current run-state</div>
+    <div class="row">
+      <div id="curstate" class="big">unknown</div>
+      <span class="spacer"></span>
+      <div id="cursince" class="muted">--</div>
+    </div>
+    <div id="curdesc" class="muted small"></div>
+  </section>
+
+  <section class="card picker">
+    <div class="cardlabel">request run-state</div>
+    <div class="row">
+      <select id="target"></select>
+      <button id="go" class="go">GO</button>
+      <button id="stop" class="stop" disabled>STOP</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="dryrun"> dry run (check only)</label>
+  </section>
+
+  <section class="card progress" id="progresscard">
+    <div class="row">
+      <div class="cardlabel">transition <span id="tstate" class="badge">idle</span></div>
+      <span class="spacer"></span>
+      <div id="teta" class="muted small">--</div>
+    </div>
+    <div class="row tight">
+      <span id="tfrom" class="muted small">--</span>
+      <span class="arrow">&rarr;</span>
+      <span id="tto" class="small strong">--</span>
+    </div>
+    <div class="meterwrap">
+      <div class="meter"><div id="meterfill" class="meterfill"></div></div>
+      <div id="tpct" class="pct">0%</div>
+    </div>
+    <div id="phase" class="muted small"></div>
+    <ul id="steps" class="steps"></ul>
+  </section>
+
+  <section class="card chartcard">
+    <div class="row">
+      <div class="cardlabel">last 5 minutes</div>
+      <span class="spacer"></span>
+      <div class="legend">
+        <span class="k cpu"></span>cpu
+        <span class="k gpu"></span>gpu
+        <span class="k mem"></span>ram
+      </div>
+    </div>
+    <canvas id="chart" height="150"></canvas>
+  </section>
+
+  <section class="card">
+    <div class="cardlabel">top processes</div>
+    <table id="procs" class="procs"></table>
+  </section>
+
+  <section class="card">
+    <div class="cardlabel">log</div>
+    <pre id="log" class="log"></pre>
+  </section>
+
+  <footer class="row links">
+    <a id="l-grafana" target="_blank" rel="noopener">grafana</a>
+    <a id="l-kibana" target="_blank" rel="noopener">kibana</a>
+    <a href="/api/docs" target="_blank" rel="noopener">api</a>
+    <a href="/api/head" target="_blank" rel="noopener">head</a>
+    <span class="spacer"></span>
+    <span id="tokenfp" class="muted tiny"></span>
+  </footer>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

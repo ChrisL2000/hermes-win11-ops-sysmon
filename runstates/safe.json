@@ -1,0 +1,30 @@
+{
+  "id": "safe",
+  "label": "Safe",
+  "icon": "shield",
+  "description": "Safe harbour: everything heavy down, power saver, minimal CPU state. A real Safe Mode boot needs bcdedit safeboot and a reboot -- see docs/RUNSTATES.md before enabling that.",
+  "est_seconds": 45,
+  "x_notes": "Live safe state only. Reboot-class safe mode (bcdedit /set {current} safeboot minimal) is documented but deliberately NOT in this manifest: an engine step cannot un-apply it without a second reboot, so it stays a human decision.",
+  "userland": { "mode": "keep", "keep": ["explorer.exe"] },
+  "gates": [
+    { "kind": "no_pending_reboot", "policy": "off" }
+  ],
+  "steps": [
+    { "id": "stop-capture", "label": "Stop OBS", "action": "process.stop",
+      "params": { "names": ["obs64.exe"], "grace_s": 8 }, "est_s": 6, "weight": 0.6, "critical": false },
+    { "id": "stop-games", "label": "Stop game launchers", "action": "process.stop",
+      "params": { "names": ["steam.exe", "steamwebhelper.exe", "gameoverlayui.exe"], "grace_s": 10 },
+      "est_s": 8, "weight": 0.6, "critical": false },
+    { "id": "stop-browsers", "label": "Stop Chrome", "action": "process.stop",
+      "params": { "names": ["chrome.exe"], "grace_s": 10 }, "est_s": 8, "weight": 0.6, "critical": false },
+    { "id": "stop-music", "label": "Stop TIDAL", "action": "process.stop",
+      "params": { "names": ["tidal.exe"], "grace_s": 6 }, "est_s": 5, "weight": 0.4, "critical": false },
+    { "id": "power", "label": "Power saver plan", "action": "power.plan",
+      "params": { "plan": "Power saver" }, "est_s": 2 },
+    { "id": "min-cpu", "label": "Processor minimum state 5%", "action": "power.setting",
+      "params": { "subgroup": "54533251-82be-4824-96c1-47b60b740d00", "setting": "893dee8e-2bef-41e0-89c6-b55d0929964c", "ac_value": 5 },
+      "est_s": 2 },
+    { "id": "shell", "label": "Explorer running", "action": "process.ensure_running",
+      "params": { "names": ["explorer.exe"] }, "est_s": 1 }
+  ]
+}

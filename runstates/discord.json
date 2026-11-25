@@ -1,0 +1,26 @@
+{
+  "id": "discord",
+  "label": "Discord",
+  "icon": "headset",
+  "description": "Voice chat and screen share. Balanced power, games and capture down, Discord up.",
+  "est_seconds": 45,
+  "userland": { "mode": "keep", "keep": ["discord.exe"] },
+  "gates": [
+    { "kind": "no_pending_reboot", "policy": "warn" }
+  ],
+  "steps": [
+    { "id": "power", "label": "Balanced power plan", "action": "power.plan",
+      "params": { "plan": "Balanced" }, "est_s": 2 },
+    { "id": "stop-obs", "label": "Stop OBS", "action": "process.stop",
+      "params": { "names": ["obs64.exe"], "grace_s": 8 }, "est_s": 6, "weight": 0.5, "critical": false },
+    { "id": "stop-games", "label": "Stop game launchers", "action": "process.stop",
+      "params": { "names": ["steam.exe", "steamwebhelper.exe", "gameoverlayui.exe"], "grace_s": 10 },
+      "est_s": 8, "weight": 0.6, "critical": false },
+    { "id": "discord", "label": "Discord running", "action": "process.start",
+      "params": { "path": "C:\\Users\\14843\\AppData\\Local\\Discord\\Update.exe", "args": ["--processStart", "Discord.exe"], "names": ["discord.exe"], "wait_s": 25 },
+      "est_s": 12 },
+    { "id": "music", "label": "TIDAL running", "action": "process.start",
+      "params": { "path": "C:\\Users\\14843\\AppData\\Local\\TIDAL\\TIDAL.exe", "names": ["tidal.exe"], "wait_s": 25 },
+      "est_s": 12, "critical": false }
+  ]
+}

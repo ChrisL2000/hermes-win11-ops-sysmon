@@ -1,0 +1,27 @@
+{
+  "id": "create",
+  "label": "Create",
+  "icon": "palette",
+  "description": "Painting, audio and capture work with the chat stack quiet.",
+  "est_seconds": 60,
+  "userland": { "mode": "keep" },
+  "gates": [
+    { "kind": "disk_free_min_gb", "value": 40, "policy": "warn" },
+    { "kind": "no_pending_reboot", "policy": "warn" }
+  ],
+  "steps": [
+    { "id": "power", "label": "High performance power plan", "action": "power.plan",
+      "params": { "plan": "High performance" }, "est_s": 2 },
+    { "id": "min-cpu", "label": "Processor minimum state 50%", "action": "power.setting",
+      "params": { "subgroup": "54533251-82be-4824-96c1-47b60b740d00", "setting": "893dee8e-2bef-41e0-89c6-b55d0929964c", "ac_value": 50 },
+      "est_s": 2 },
+    { "id": "stop-games", "label": "Stop game launchers", "action": "process.stop",
+      "params": { "names": ["steam.exe", "steamwebhelper.exe", "gameoverlayui.exe"], "grace_s": 10 },
+      "est_s": 8, "weight": 0.6, "critical": false },
+    { "id": "stop-music", "label": "Stop TIDAL (avoid capture bleed)", "action": "process.stop",
+      "params": { "names": ["tidal.exe"], "grace_s": 6 }, "est_s": 5, "weight": 0.4, "critical": false },
+    { "id": "krita", "label": "Krita running", "action": "process.start",
+      "params": { "path": "C:\\Program Files\\Krita (x64)\\bin\\krita.exe", "names": ["krita.exe"], "wait_s": 30 },
+      "est_s": 14, "critical": false }
+  ]
+}

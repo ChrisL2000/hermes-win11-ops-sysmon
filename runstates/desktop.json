@@ -1,0 +1,22 @@
+{
+  "id": "desktop",
+  "label": "Desktop",
+  "icon": "monitor",
+  "description": "Everyday browsing and chat. Balanced power, no capture stack.",
+  "est_seconds": 25,
+  "userland": { "mode": "keep" },
+  "gates": [
+    { "kind": "no_pending_reboot", "policy": "warn" }
+  ],
+  "steps": [
+    { "id": "power", "label": "Balanced power plan", "action": "power.plan",
+      "params": { "plan": "Balanced" }, "est_s": 2 },
+    { "id": "min-cpu", "label": "Processor minimum state 5%", "action": "power.setting",
+      "params": { "subgroup": "54533251-82be-4824-96c1-47b60b740d00", "setting": "893dee8e-2bef-41e0-89c6-b55d0929964c", "ac_value": 5 },
+      "est_s": 2 },
+    { "id": "stop-obs", "label": "Stop OBS", "action": "process.stop",
+      "params": { "names": ["obs64.exe"] }, "est_s": 4, "weight": 0.5, "critical": false },
+    { "id": "shell", "label": "Explorer running", "action": "process.ensure_running",
+      "params": { "names": ["explorer.exe"] }, "est_s": 1 }
+  ]
+}
